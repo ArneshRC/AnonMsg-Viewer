@@ -3,9 +3,9 @@ const puppeteer = require("puppeteer");
 const dotenv = require("dotenv");
 const fs = require("fs");
 const path = require("path");
+const dayjs = require("dayjs")
 
 dotenv.config();
-
 mongoose.connect(process.env.MONGODB_URI, {
     dbName: "anonmsg",
     useNewUrlParser: true,
@@ -50,7 +50,7 @@ async function generateScreenshots(cutoffTimestamp) {
                 .replace("{{TEXT}}", message.text)
                 .replace(
                     "{{TIMESTAMP}}",
-                    new Date(message.timestamp * 1000).toLocaleString(),
+                    dayjs.unix(message.timestamp).format('D/M/YY h:mm:ss A')
                 );
 
             fs.writeFileSync(tempHtmlPath, htmlContent);
