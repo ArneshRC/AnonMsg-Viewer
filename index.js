@@ -47,7 +47,7 @@ async function generateScreenshots(cutoffTimestamp) {
 			const filePath = path.join(OUTPUT_DIR, `${message.timestamp}.png`);
 
 			const htmlContent = templateHtml
-				.replace("{{TEXT}}", message.text)
+				.replace("{{TEXT}}", message.text.replaceAll("\n", "<br>"))
 				.replace(
 					"{{TIMESTAMP}}",
 					dayjs.unix(message.timestamp).format("D/M/YY h:mm:ss A"),
