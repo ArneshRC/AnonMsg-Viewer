@@ -7,9 +7,7 @@ const dayjs = require("dayjs");
 
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URI, {
-	dbName: "anonmsg",
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
+	dbName: "anonmsg"
 });
 
 const Message = mongoose.model(
