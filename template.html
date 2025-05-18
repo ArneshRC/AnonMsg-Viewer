@@ -14,4 +14,22 @@
       </div>
     </div>
   </body>
+  <script defer>
+    const textEl = document.querySelector('.text');
+    const container = document.querySelector('.container');
+    const containerStyle = window.getComputedStyle(container);
+    const effectiveContainerHeight = parseFloat(containerStyle.height)
+      - parseFloat(containerStyle.paddingBottom);
+    function fitText(minPx = 12) {
+      let style = window.getComputedStyle(textEl);
+      let fontSize = parseFloat(style.fontSize);
+      while (textEl.scrollHeight > effectiveContainerHeight && fontSize > minPx) {
+        fontSize -= 1;
+        textEl.style.fontSize = fontSize + 'px';
+      }
+    }
+    window.addEventListener('DOMContentLoaded', () => fitText());
+    window.addEventListener('resize', () => fitText());
+    fitText();
+  </script>
 </html>
