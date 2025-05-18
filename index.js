@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const puppeteer = require("puppeteer");
+const {escape} = require("html-escaper");
 const dotenv = require("dotenv");
 const fs = require("fs");
 const path = require("path");
@@ -7,7 +8,7 @@ const dayjs = require("dayjs");
 
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URI, {
-	dbName: "anonmsg"
+	dbName: "anonmsg",
 });
 
 const Message = mongoose.model(
@@ -45,7 +46,7 @@ async function generateScreenshots(cutoffTimestamp) {
 			const filePath = path.join(OUTPUT_DIR, `${message.timestamp}.png`);
 
 			const htmlContent = templateHtml
-				.replace("{{TEXT}}", message.text.replaceAll("\n", "<br>"))
+				.replace("{{TEXT}}", message.text.split("\n").map(escape).join("<br>"))
 				.replace(
 					"{{TIMESTAMP}}",
 					dayjs.unix(message.timestamp).format("D/M/YY h:mm:ss A"),
@@ -74,7 +75,14 @@ async function generateScreenshots(cutoffTimestamp) {
 	}
 }
 
-const cutoffTimestamp = process.argv[2] ? Number.parseInt(process.argv[2]) : 0;
+const cutoffTimestamp = process.argv[2]
+	? Number.parseInt(process.argv[2])
+	: Math.max(
+			...fs
+				.readdirSync(OUTPUT_DIR)
+				.filter((file) => file.endsWith(".png"))
+				.map((file) => Number.parseInt(file.split(".")[0])),
+		);
 
 console.log(
 	"Generating screenshots from messages with timestamp >",

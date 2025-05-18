@@ -12,6 +12,7 @@
   "dependencies": {
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
+    "html-escaper": "^3.0.3",
     "mongoose": "^8.9.6",
     "puppeteer": "^24.1.1"
   }
